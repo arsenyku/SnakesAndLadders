@@ -13,6 +13,7 @@
 		12EB8B041B923F100011AFD8 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B011B923F100011AFD8 /* Dice.m */; };
 		12EB8B051B923F100011AFD8 /* InputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B031B923F100011AFD8 /* InputController.m */; };
 		12EB8B081B92401A0011AFD8 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B071B92401A0011AFD8 /* Player.m */; };
+		12EB8B0B1B925FDE0011AFD8 /* BoardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B0A1B925FDE0011AFD8 /* BoardCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,8 @@
 		12EB8B031B923F100011AFD8 /* InputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputController.m; sourceTree = "<group>"; };
 		12EB8B061B92401A0011AFD8 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		12EB8B071B92401A0011AFD8 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		12EB8B091B925FDE0011AFD8 /* BoardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardCell.h; sourceTree = "<group>"; };
+		12EB8B0A1B925FDE0011AFD8 /* BoardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,8 @@
 				12EB8AFE1B923EAE0011AFD8 /* GameController.m */,
 				12EB8B061B92401A0011AFD8 /* Player.h */,
 				12EB8B071B92401A0011AFD8 /* Player.m */,
+				12EB8B091B925FDE0011AFD8 /* BoardCell.h */,
+				12EB8B0A1B925FDE0011AFD8 /* BoardCell.m */,
 			);
 			path = SnakesAndLadders;
 			sourceTree = "<group>";
@@ -143,6 +148,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12EB8B0B1B925FDE0011AFD8 /* BoardCell.m in Sources */,
 				12EB8AFF1B923EAE0011AFD8 /* GameController.m in Sources */,
 				12EB8AFC1B9230FE0011AFD8 /* Board.m in Sources */,
 				12EB8B051B923F100011AFD8 /* InputController.m in Sources */,

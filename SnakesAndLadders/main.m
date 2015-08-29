@@ -81,7 +81,8 @@ int main(int argc, const char * argv[]) {
                 } else {
                     // ROLL!
                     
-                    [game rollForCurrentPlayer];
+                    int roll = [game rollForCurrentPlayer];
+                    
                     
                 }
                 

@@ -50,8 +50,8 @@
     
 }
 
--(void)rollForCurrentPlayer{
-    int roll = [self.die roll];
+-(int)rollForCurrentPlayer{
+    return [self.die roll];
 }
 
 
