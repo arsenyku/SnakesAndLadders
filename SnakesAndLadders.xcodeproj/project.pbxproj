@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		12EB8AF41B9230C90011AFD8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8AF31B9230C90011AFD8 /* main.m */; };
+		12EB8AFC1B9230FE0011AFD8 /* Board.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8AFB1B9230FE0011AFD8 /* Board.m */; };
+		12EB8AFF1B923EAE0011AFD8 /* GameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8AFE1B923EAE0011AFD8 /* GameController.m */; };
+		12EB8B041B923F100011AFD8 /* Dice.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B011B923F100011AFD8 /* Dice.m */; };
+		12EB8B051B923F100011AFD8 /* InputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B031B923F100011AFD8 /* InputController.m */; };
+		12EB8B081B92401A0011AFD8 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EB8B071B92401A0011AFD8 /* Player.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +30,16 @@
 /* Begin PBXFileReference section */
 		12EB8AF01B9230C90011AFD8 /* SnakesAndLadders */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SnakesAndLadders; sourceTree = BUILT_PRODUCTS_DIR; };
 		12EB8AF31B9230C90011AFD8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		12EB8AFA1B9230FE0011AFD8 /* Board.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Board.h; sourceTree = "<group>"; };
+		12EB8AFB1B9230FE0011AFD8 /* Board.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Board.m; sourceTree = "<group>"; };
+		12EB8AFD1B923EAE0011AFD8 /* GameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameController.h; sourceTree = "<group>"; };
+		12EB8AFE1B923EAE0011AFD8 /* GameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameController.m; sourceTree = "<group>"; };
+		12EB8B001B923F100011AFD8 /* Dice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dice.h; sourceTree = "<group>"; };
+		12EB8B011B923F100011AFD8 /* Dice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dice.m; sourceTree = "<group>"; };
+		12EB8B021B923F100011AFD8 /* InputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputController.h; sourceTree = "<group>"; };
+		12EB8B031B923F100011AFD8 /* InputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputController.m; sourceTree = "<group>"; };
+		12EB8B061B92401A0011AFD8 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		12EB8B071B92401A0011AFD8 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +73,16 @@
 			isa = PBXGroup;
 			children = (
 				12EB8AF31B9230C90011AFD8 /* main.m */,
+				12EB8B001B923F100011AFD8 /* Dice.h */,
+				12EB8B011B923F100011AFD8 /* Dice.m */,
+				12EB8B021B923F100011AFD8 /* InputController.h */,
+				12EB8B031B923F100011AFD8 /* InputController.m */,
+				12EB8AFA1B9230FE0011AFD8 /* Board.h */,
+				12EB8AFB1B9230FE0011AFD8 /* Board.m */,
+				12EB8AFD1B923EAE0011AFD8 /* GameController.h */,
+				12EB8AFE1B923EAE0011AFD8 /* GameController.m */,
+				12EB8B061B92401A0011AFD8 /* Player.h */,
+				12EB8B071B92401A0011AFD8 /* Player.m */,
 			);
 			path = SnakesAndLadders;
 			sourceTree = "<group>";
@@ -118,6 +143,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12EB8AFF1B923EAE0011AFD8 /* GameController.m in Sources */,
+				12EB8AFC1B9230FE0011AFD8 /* Board.m in Sources */,
+				12EB8B051B923F100011AFD8 /* InputController.m in Sources */,
+				12EB8B041B923F100011AFD8 /* Dice.m in Sources */,
+				12EB8B081B92401A0011AFD8 /* Player.m in Sources */,
 				12EB8AF41B9230C90011AFD8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
