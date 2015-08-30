@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, Difficulty) {
 
 @interface GameController : NSObject
 
-@property (nonatomic, strong) id<PlayerPositionDelegate> playerPositionDelegate;
+@property (nonatomic, weak) id<PlayerPositionDelegate> playerPositionDelegate;
 
 
 -(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name andDifficulty:(Difficulty)difficulty;
