@@ -61,12 +61,12 @@
     
     [self movePlayerByAmount:roll];
     
-    self.playerThisTurn = self.players [ [self.playerThisTurn.idNumber isEqual:@1] ? 1 : 0 ];
-    
     [self.playerPositionDelegate player:self.playerThisTurn movedNumberOfPositions:roll];
 
     if (self.winner != nil)
 	    [self.playerPositionDelegate playerHasWon:self.winner];
+    
+    self.playerThisTurn = self.players [ [self.playerThisTurn.idNumber isEqual:@1] ? 1 : 0 ];
     
     return roll;
 }

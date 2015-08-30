@@ -22,6 +22,7 @@ void showTurnMenu(NSString *playerName){
     NSString *outputFormat = \
         @"Player %@ move: \n" \
     	@"Press <enter> to roll \n" \
+    	@"Type new to start a new game \n" \
     	@"Type %@ to end game.";
     
     NSString *text = [NSString stringWithFormat:outputFormat, \
