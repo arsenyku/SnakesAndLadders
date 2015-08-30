@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface Player : NSObject
+@property (nonatomic, strong, readonly) NSNumber *idNumber;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) int row;
 @property (nonatomic, assign) int column;
+
+-(instancetype)initWithId:(NSNumber*)idNumber;
 @end

@@ -21,11 +21,12 @@
 
 @interface GameController : NSObject
 
-@property (nonatomic, strong, readonly) Player *playerThisTurn;
 @property (nonatomic, strong) id<PlayerPositionDelegate> playerPositionDelegate;
+
 
 -(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name;
 -(int)rollAndMoveCurrentPlayer;
+-(Player*)playerThisTurn;
 
 -(void)showState;
 -(void)showBoard;

@@ -12,9 +12,8 @@
 
 
 @interface GameController()
-@property (nonatomic, strong, readwrite) Player *playerThisTurn;
 
-
+@property (nonatomic, strong) Player *playerThisTurn;
 @property (nonatomic, strong) NSArray *players;
 @property (nonatomic, strong) Board *board;
 @property (nonatomic, strong) Dice *die;
@@ -31,13 +30,17 @@
     if (self) {
         _board = [Board new];
         _die = [[Dice alloc] initWithName:@"SnakesAndLadders"];
-        _players = @[ [Player new], [Player new] ];
-        _playerThisTurn = _players[0];
+        _players = @[ [[Player alloc] initWithId:@1], [[Player alloc] initWithId:@2] ];
+
     }
     return self;
 }
 
 #pragma mark - Public
+
+//-(Player *)playerThisTurn{
+//    return self.playerThisTurn;
+//}
 
 -(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name{
  
@@ -53,7 +56,9 @@
 -(int)rollAndMoveCurrentPlayer;{
     int roll = [self.die roll];
     
-    [self movePlayerByAmount:1];
+    [self movePlayerByAmount:roll];
+    
+    self.playerThisTurn = self.players [ [self.playerThisTurn.idNumber isEqual:@1] ? 1 : 0 ];
     
     return roll;
 }
@@ -92,8 +97,25 @@
     	self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
     }
     
-    originCell.appearance = @"___";
-    destinationCell.appearance = @"_>_";
+    [self.board removePlayersFromCell:originCell];
+    [self drawPlayersOnBoard];
+}
+
+-(void)drawPlayersOnBoard{
+    
+    Player *p1 = self.players[0];
+    Player *p2 = self.players[1];
+    
+    BoardCell *cellForP1 = [self.board cellAtRow:p1.row andColumn:p1.column];
+    BoardCell *cellForP2 = [self.board cellAtRow:p2.row andColumn:p2.column];
+    
+    if (cellForP1 == cellForP2){
+        [self.board drawPlayer1:p1 andPlayer2:p2 onCell:cellForP1];
+    } else {
+        [self.board drawPlayer:p1 onCell:cellForP1];
+        [self.board drawPlayer:p2 onCell:cellForP2];
+    }
+    
 }
 
 

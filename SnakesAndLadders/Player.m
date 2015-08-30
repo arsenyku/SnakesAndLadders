@@ -9,10 +9,15 @@
 #import "Player.h"
 
 @implementation Player
-- (instancetype)init
+- (instancetype)init{
+    return [self initWithId:0];
+}
+
+- (instancetype)initWithId:(NSNumber*)number
 {
     self = [super init];
     if (self) {
+        _idNumber = number;
         _name = @"";
         _row = 0;
         _column = 0;

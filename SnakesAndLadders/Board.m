@@ -55,6 +55,37 @@
 }
 
 
+-(void)drawPlayer1:(Player*)p1 andPlayer2:(Player*)p2 onCell:(BoardCell*)cell{
+    int rowNumber = [cell.propertyList[@"row"] intValue];
+    if (rowNumber % 2 == 0)
+        cell.appearance = [NSString stringWithFormat:@"%@%@%@", p1.idNumber, @">", p2.idNumber];
+    else
+        cell.appearance = [NSString stringWithFormat:@"%@%@%@", p1.idNumber, @"<", p2.idNumber];
+}
+
+
+-(void)drawPlayer:(Player*)player onCell:(BoardCell*)cell{
+    
+    int rowNumber = [cell.propertyList[@"row"] intValue];
+    if (rowNumber % 2 == 0)
+        cell.appearance = [NSString stringWithFormat:@"%@%@%@", @"_", player.idNumber, @">"];
+	else
+    	cell.appearance = [NSString stringWithFormat:@"%@%@%@", @"<", player.idNumber, @"_"];
+}
+
+-(void)removePlayersFromCell:(BoardCell *)cell{
+    cell.appearance = @"___";
+    
+    NSNumber *cellRow = cell.propertyList[@"row"];
+    NSNumber *cellColumn = cell.propertyList[@"column"];
+    
+    if ([cellRow isEqual:@0] && [cellColumn isEqual:@0] )
+        cell.appearance = @">>>";
+    
+    if ([cellRow isEqual:[NSNumber numberWithInt:self.sideLength-1]] && [cellColumn isEqual:[NSNumber numberWithInt:self.sideLength-1]])
+        cell.appearance = @"!!!";
+}
+
 #pragma mark  - private
 
 -(BoardCell*)generateRowInDirection:(Direction)direction{
