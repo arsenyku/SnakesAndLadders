@@ -50,8 +50,12 @@
     
 }
 
--(int)rollForCurrentPlayer{
-    return [self.die roll];
+-(int)rollAndMoveCurrentPlayer;{
+    int roll = [self.die roll];
+    
+    [self movePlayerByAmount:1];
+    
+    return roll;
 }
 
 
@@ -75,7 +79,21 @@
 }
 
 -(void)movePlayerByAmount:(int)numberOfCells{
+    BoardCell *originCell = [self.board cellAtRow:self.playerThisTurn.row andColumn:self.playerThisTurn.column];
+    BoardCell *destinationCell = [self.board skipForwardFromCell:originCell byNumberOfLinks:numberOfCells]; 
+
+    if (destinationCell == nil){
+        destinationCell = [self.board cellAtRow:self.board.sideLength-1 andColumn:0];
+        self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
+        self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
+        
+    } else {
+    	self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
+    	self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
+    }
     
+    originCell.appearance = @"___";
+    destinationCell.appearance = @"_>_";
 }
 
 

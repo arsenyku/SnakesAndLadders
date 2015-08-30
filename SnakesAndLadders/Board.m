@@ -7,10 +7,9 @@
 //
 
 #import "Board.h"
-#import "BoardCell.h"
 
 @interface Board()
-@property (nonatomic, assign)int sideLength;
+@property (nonatomic, assign, readwrite)int sideLength;
 @property (nonatomic, strong)BoardCell* start;
 @property (nonatomic, strong)NSDictionary *rows;
 @end
@@ -49,10 +48,17 @@
 }
 
 
+-(BoardCell*)cellAtRow:(int)rowNumber andColumn:(int)columnNumber{
+    NSNumber *row = [NSNumber numberWithInt:rowNumber];
+    NSNumber *column = [NSNumber numberWithInt:columnNumber];
+    return self.rows[row][column];
+}
+
+
 #pragma mark  - private
 
--(BoardCell*)generateRow{
-    return [self generateNumberOfCells:self.sideLength InDirection:East];
+-(BoardCell*)generateRowInDirection:(Direction)direction{
+    return [self generateNumberOfCells:self.sideLength InDirection:direction];
 }
 
 
@@ -87,11 +93,17 @@
     {
         NSMutableDictionary *row = [NSMutableDictionary new];
         
-        BoardCell *rowStart = [self generateRow];
+        BoardCell *rowStart ;
+        
+		rowStart = [self generateRowInDirection:East];
+    
         BoardCell *currentCell = rowStart;
         
         for (int position = 0; position < self.sideLength; position++){
             currentCell.appearance = @"___";
+            currentCell.propertyList[ @"row" ] = [NSNumber numberWithInt:rowNumber];
+            currentCell.propertyList[ @"column" ] = [NSNumber numberWithInt:position];
+
             row[ [NSNumber numberWithInt:position] ] = currentCell;
             
             currentCell = [currentCell nextCellInDirection:East];
@@ -103,16 +115,16 @@
             
             if (rowNumber % 2 == 0){
 
-                BoardCell *previousRowFirstCell = [self cellAtRow:rowNumber-1 andColumn:0];
-                BoardCell *firstInRow = [self cellAtRow:rowNumber andColumn:0];
+                BoardCell *previousRowFirstCell = rows[ [NSNumber numberWithInt:rowNumber-1] ][ [NSNumber numberWithInt:0] ];
+                BoardCell *firstInRow = row[ [NSNumber numberWithInt:0] ];   // [self cellAtRow:rowNumber andColumn:0];
                 
                 [previousRowFirstCell linkToCell:firstInRow inDirection:South];
 
                 
             } else {
 
-                BoardCell *previousRowLastCell = [self cellAtRow:rowNumber-1 andColumn:self.sideLength - 1];
-                BoardCell *lastInRow = [self cellAtRow:rowNumber andColumn:self.sideLength - 1];
+                BoardCell *previousRowLastCell = rows[ [NSNumber numberWithInt:rowNumber-1] ][ [NSNumber numberWithInt:self.sideLength-1] ];
+                BoardCell *lastInRow = row [ [NSNumber numberWithInt:self.sideLength - 1] ];
 
                 [previousRowLastCell linkToCell:lastInRow inDirection:South];
                 
@@ -126,17 +138,35 @@
     
     [self cellAtRow:0 andColumn:0].appearance = @"_>_";
     
-    [self cellAtRow:(self.sideLength - 1) andColumn:(self.sideLength - 1)].appearance = @"!!!";
+    [self cellAtRow:(self.sideLength - 1) andColumn:0].appearance = @"!!!";
     
     
     
 }
 
--(BoardCell*)cellAtRow:(int)rowNumber andColumn:(int)columnNumber{
-    NSNumber *row = [NSNumber numberWithInt:rowNumber];
-    NSNumber *column = [NSNumber numberWithInt:columnNumber];
-    return self.rows[row][column];
+-(BoardCell*)skipForwardFromCell:(BoardCell*)startCell byNumberOfLinks:(int)numberOfLinks {
+	if (numberOfLinks == 0)
+        return startCell;
+
+    int row = [(NSNumber*)startCell.propertyList[ @"row" ] intValue];
+    Direction forward = (row % 2 == 0) ? East : West;
+    BoardCell *nextCell = [startCell nextCellInDirection:forward];
+    if (nextCell != nil){
+        return [self skipForwardFromCell:nextCell byNumberOfLinks:numberOfLinks-1];
+    } else {
+        // Hit edge of board.
+        BoardCell *southCell = [startCell nextCellInDirection:South];
+        forward = (forward == East) ? West : East;
+        if (southCell != nil) {
+            return [self skipForwardFromCell:southCell byNumberOfLinks:numberOfLinks-1];
+        } else {
+            // Hit bottom left corner of board
+            return nil;
+        }
+    }
 }
+
+
 
 
 #pragma mark - class

@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, Direction) {
 @interface BoardCell : NSObject
 
 @property (strong, nonatomic) id appearance;
+@property (strong, nonatomic, readonly) NSMutableDictionary* propertyList;
 
 @property (strong, nonatomic, readonly) BoardCell *northCell;
 @property (strong, nonatomic, readonly) BoardCell *southCell;

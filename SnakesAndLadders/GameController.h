@@ -12,9 +12,10 @@
 
 @protocol PlayerPositionDelegate <NSObject>
 
--(void)playerMovedNumberOfPositions:(int)numberOfPositions toRow:(int)newPositionRow andColumn:(int)newPositionColumn;
--(void)playerEncounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber;
--(void)playerEncounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber;
+-(void)player:(Player*)player movedNumberOfPositions:(int)numberOfPositions toRow:(int)newPositionRow andColumn:(int)newPositionColumn;
+-(void)player:(Player*)player encounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber;
+-(void)player:(Player*)player encounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber;
+-(void)playerHasWon:(Player*)player;
 
 @end
 
@@ -24,8 +25,7 @@
 @property (nonatomic, strong) id<PlayerPositionDelegate> playerPositionDelegate;
 
 -(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name;
--(int)rollForCurrentPlayer;
-
+-(int)rollAndMoveCurrentPlayer;
 
 -(void)showState;
 -(void)showBoard;

@@ -52,6 +52,7 @@
     
     if (self){
         _appearance = @"";
+        _propertyList = [NSMutableDictionary new];
         
         _northCell = nil;
         _southCell = nil;
