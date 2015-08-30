@@ -15,6 +15,8 @@ static NSString* const NewGameCommand = @"new";
 static NSString* const QuitCommand = @"quit";
 
 void showGameMenu(){
+    [InputController showLineWithText:@"Set the difficulty level: easy medium hard"];
+    [InputController showLineWithText:@"Press <enter> for default (medium)"];
     [InputController showText:@"Start? "];
 }
 
@@ -41,6 +43,20 @@ NSString* collectInput(InputController *inputController){
     return input;
 }
 
+Difficulty getDifficultyFromText(NSString* input){
+    if ([input isEqualToString: @"easy"])
+        return Easy;
+    
+    if ([input isEqualToString: @"hard"])
+        return Hard;
+    
+    if ([input isEqualToString: @"empty"])
+        return Empty;
+    
+    return Medium;
+
+}
+
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
@@ -56,13 +72,15 @@ int main(int argc, const char * argv[]) {
             showGameMenu();
             input = collectInput(inputController);
             
+            Difficulty difficulty = getDifficultyFromText([input lowercaseString]);
+            
             [InputController showLineWithText:@"Enter Player 1's name:"];
             NSString *p1Name = collectInput(inputController);
 
             [InputController showLineWithText:@"Enter Player 2's name:"];
             NSString *p2Name = collectInput(inputController);
             
-            [game startNewGameWithPlayer1:p1Name andPlayer2:p2Name];
+            [game startNewGameWithPlayer1:p1Name andPlayer2:p2Name andDifficulty:difficulty];
             
             stayInTurnLoop = YES;
             
@@ -90,8 +108,6 @@ int main(int argc, const char * argv[]) {
                     // ROLL!
                     
                     [game rollAndMoveCurrentPlayer];
-                    
-                    
                 }
                 
             }

@@ -14,23 +14,31 @@
 @property (nonatomic, strong)BoardCell* start;
 @property (nonatomic, strong)NSDictionary *rows;
 
+@property (nonatomic, assign)float snakeLikelihood;
+@property (nonatomic, assign)float ladderLikelihood;
+
 @property (nonatomic, strong)NSString *winner;
 @end
+
 
 @implementation Board
 
 #pragma mark - initializers
 
 -(instancetype)init{
-    return [self initWithLength:10];
+    return [self initWithLength:10 snakeCount:0 ladderCount:0];
 }
 
--(instancetype)initWithLength:(int)length{
+-(instancetype)initWithLength:(int)length snakeCount:(int)numberOfSnakes ladderCount:(int)numberOfLadders{
     self = [super init];
     if (self)
     {
         _sideLength = length;
         _winner = nil;
+        
+        _snakeLikelihood = (float)numberOfSnakes / (_sideLength * _sideLength);
+        _ladderLikelihood = (float)numberOfLadders / (_sideLength * _sideLength);
+        
         [self generate];
     }
     return self;
@@ -82,8 +90,16 @@
     	cell.appearance = [NSString stringWithFormat:@"%@%@%@", @"<", player.idNumber, @"_"];
 }
 
--(void)removePlayersFromCell:(BoardCell *)cell{
-    cell.appearance = @"___";
+-(void)removePlayersFromCell:(BoardCell *)boardCell{
+    SnakesAndLaddersCell *cell = (SnakesAndLaddersCell*)boardCell;
+    if (cell.hazard == Snake)
+        cell.appearance = @"SSS";
+    else if (cell.hazard == Ladder)
+        cell.appearance = @"LLL";
+    else
+        cell.appearance = @"___";
+
+    
     
     NSNumber *cellRow = cell.propertyList[@"row"];
     NSNumber *cellColumn = cell.propertyList[@"column"];
@@ -97,19 +113,19 @@
 
 #pragma mark  - private
 
--(BoardCell*)generateRowInDirection:(Direction)direction{
+-(SnakesAndLaddersCell*)generateRowInDirection:(Direction)direction{
     return [self generateNumberOfCells:self.sideLength InDirection:direction];
 }
 
 
 
--(BoardCell*)generateNumberOfCells:(int)numberOfCells InDirection:(Direction)direction{
+-(SnakesAndLaddersCell*)generateNumberOfCells:(int)numberOfCells InDirection:(Direction)direction{
     
 
     BoardCell *previousCell = nil;
-    BoardCell *startCell = nil;
+    SnakesAndLaddersCell *startCell = nil;
     for (int i = 0; i < numberOfCells ; i++){
-        BoardCell *newCell = [BoardCell new];
+        SnakesAndLaddersCell *newCell = [SnakesAndLaddersCell new];
         if (i == 0){
             startCell = newCell;
             previousCell = newCell;
@@ -133,20 +149,28 @@
     {
         NSMutableDictionary *row = [NSMutableDictionary new];
         
-        BoardCell *rowStart ;
+        SnakesAndLaddersCell *rowStart ;
         
 		rowStart = [self generateRowInDirection:East];
     
-        BoardCell *currentCell = rowStart;
+        SnakesAndLaddersCell *currentCell = rowStart;
         
         for (int position = 0; position < self.sideLength; position++){
-            currentCell.appearance = @"___";
+            [self calculateHazardForCell:currentCell];
+            
+            if (currentCell.hazard == Snake)
+                currentCell.appearance = @"SSS";
+            else if (currentCell.hazard == Ladder)
+                currentCell.appearance = @"LLL";
+            else
+	            currentCell.appearance = @"___";
+    
             currentCell.propertyList[ @"row" ] = [NSNumber numberWithInt:rowNumber];
             currentCell.propertyList[ @"column" ] = [NSNumber numberWithInt:position];
 
             row[ [NSNumber numberWithInt:position] ] = currentCell;
             
-            currentCell = [currentCell nextCellInDirection:East];
+            currentCell = (SnakesAndLaddersCell*)[currentCell nextCellInDirection:East];
         }
     
         rows[ [NSNumber numberWithInt:rowNumber] ] = row;
@@ -206,6 +230,48 @@
     }
 }
 
+-(BoardCell*)skipBackwardFromCell:(BoardCell*)startCell byNumberOfLinks:(unsigned int)numberOfLinks {
+
+    if (numberOfLinks == 0)
+        return startCell;
+    
+    int row = [(NSNumber*)startCell.propertyList[ @"row" ] intValue];
+    Direction backward = (row % 2 == 0) ? West : East;
+    BoardCell *nextCell = [startCell nextCellInDirection:backward];
+    if (nextCell != nil){
+        return [self skipBackwardFromCell:nextCell byNumberOfLinks:numberOfLinks-1];
+    } else {
+        // Hit edge of board.
+        BoardCell *northCell = [startCell nextCellInDirection:North];
+        backward = (backward == East) ? West : East;
+        if (northCell != nil) {
+            return [self skipBackwardFromCell:northCell byNumberOfLinks:numberOfLinks-1];
+        } else {
+            // Hit top left corner of board
+            return nil;
+        }
+    }
+
+}
+
+-(void)calculateHazardForCell:(SnakesAndLaddersCell*)cell{
+	
+    int const HazardLimit = 10;
+    float boardSize = (float)(self.sideLength * self.sideLength);
+    
+    float chanceRoll = (float)arc4random_uniform(101) / boardSize ;
+    BOOL hasSnake = chanceRoll < self.snakeLikelihood;
+   
+    chanceRoll = (float)arc4random_uniform(101) / boardSize;
+    BOOL hasLadder = chanceRoll < self.ladderLikelihood;
+    
+    unsigned int hazardValue = arc4random_uniform(HazardLimit) + 1;   // Valid range: 1 to 10 spaces
+    
+    if (hasSnake)
+        [cell setHazard:Snake withValue:hazardValue];
+    else if (hasLadder)
+        [cell setHazard:Ladder withValue:hazardValue];
+}
 
 -(void)showWinner{
     if (self.winner == nil)
@@ -232,6 +298,10 @@
     }
 }
 
+-(void)saveWinnerName:(Player*)player{
+    self.winner = player.name;
+}
+
 #pragma mark - <PlayerPositionDelegate>
 
 -(void)player:(Player*)player movedNumberOfPositions:(int)numberOfPositions {
@@ -242,15 +312,21 @@
 }
 
 -(void)player:(Player*)player encounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber{
-    
+    [InputController showLineWithText:[NSString stringWithFormat:
+                                       @"%@ encounterd a SNAKE!!!  You will move back by %d spaces.",
+                                       player.name, setbackNumber]];
+
 }
 
 -(void)player:(Player*)player encounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber{
-    
+    [InputController showLineWithText:[NSString stringWithFormat:
+                                       @"%@ encounterd a LADDER!!!  You will move forward by %d spaces.",
+                                       player.name, forwardBoostNumber]];
+ 
 }
 
 -(void)playerHasWon:(Player*)player{
-    self.winner = player.name;
+    [self saveWinnerName:player];
 }
 
 #pragma mark - class

@@ -9,18 +9,23 @@
 #import <Foundation/Foundation.h>
 #import "Player.h"
 
+typedef NS_ENUM(NSInteger, Difficulty) {
+    Empty,
+    Easy,
+    Medium,
+    Hard
+};
 
 @interface GameController : NSObject
 
 @property (nonatomic, strong) id<PlayerPositionDelegate> playerPositionDelegate;
 
 
--(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name;
+-(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name andDifficulty:(Difficulty)difficulty;
 -(int)rollAndMoveCurrentPlayer;
 -(Player*)playerThisTurn;
 -(Player*)winner;
 
 -(void)showState;
--(void)showBoard;
 @end
 
