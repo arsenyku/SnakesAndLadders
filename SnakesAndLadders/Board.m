@@ -267,6 +267,13 @@
     
     unsigned int hazardValue = arc4random_uniform(HazardLimit) + 1;   // Valid range: 1 to 10 spaces
     
+    // Prevent the scenario where a snake jumps the player back to a ladder
+    // so that there will be no circular jumping.
+    SnakesAndLaddersCell* potentialDestinationCell =
+    	(SnakesAndLaddersCell*)[self skipBackwardFromCell:cell byNumberOfLinks:hazardValue];
+    if (potentialDestinationCell.hazard == Ladder)
+        hasSnake = NO;
+    
     if (hasSnake)
         [cell setHazard:Snake withValue:hazardValue];
     else if (hasLadder)
