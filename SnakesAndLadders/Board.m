@@ -7,11 +7,14 @@
 //
 
 #import "Board.h"
+#import "InputController.h"
 
 @interface Board()
 @property (nonatomic, assign, readwrite)int sideLength;
 @property (nonatomic, strong)BoardCell* start;
 @property (nonatomic, strong)NSDictionary *rows;
+
+@property (nonatomic, strong)NSString *winner;
 @end
 
 @implementation Board
@@ -27,6 +30,7 @@
     if (self)
     {
         _sideLength = length;
+        _winner = nil;
         [self generate];
     }
     return self;
@@ -36,6 +40,11 @@
 #pragma mark - public
 
 -(void)show{
+    if (self.winner){
+        [self showWinner];
+        return;
+    }
+    
     for (int row = 0; row < self.sideLength; row++)
     {
         for (int column = 0; column < self.sideLength; column++){
@@ -43,7 +52,7 @@
             [[self cellAtRow:row andColumn:column].appearance getCString:cellBuffer maxLength:sizeof(cellBuffer) encoding:NSUTF8StringEncoding];
             printf("%s ",cellBuffer);
         }
-        printf("\n");
+        printf("\n\n");
     }
 }
 
@@ -82,7 +91,7 @@
     if ([cellRow isEqual:@0] && [cellColumn isEqual:@0] )
         cell.appearance = @">>>";
     
-    if ([cellRow isEqual:[NSNumber numberWithInt:self.sideLength-1]] && [cellColumn isEqual:[NSNumber numberWithInt:self.sideLength-1]])
+    if ([cellRow isEqual:[NSNumber numberWithInt:self.sideLength-1]] && [cellColumn isEqual:[NSNumber numberWithInt:0]])
         cell.appearance = @"!!!";
 }
 
@@ -147,7 +156,7 @@
             if (rowNumber % 2 == 0){
 
                 BoardCell *previousRowFirstCell = rows[ [NSNumber numberWithInt:rowNumber-1] ][ [NSNumber numberWithInt:0] ];
-                BoardCell *firstInRow = row[ [NSNumber numberWithInt:0] ];   // [self cellAtRow:rowNumber andColumn:0];
+                BoardCell *firstInRow = row[ [NSNumber numberWithInt:0] ];
                 
                 [previousRowFirstCell linkToCell:firstInRow inDirection:South];
 
@@ -167,7 +176,7 @@
 
     self.rows = [rows copy];
     
-    [self cellAtRow:0 andColumn:0].appearance = @"_>_";
+    [self cellAtRow:0 andColumn:0].appearance = @">>>";
     
     [self cellAtRow:(self.sideLength - 1) andColumn:0].appearance = @"!!!";
     
@@ -198,7 +207,51 @@
 }
 
 
+-(void)showWinner{
+    if (self.winner == nil)
+    {
+        [self show];
+        return;
+    }
+    
+    for (int row = 0; row < self.sideLength; row++)
+    {
+        if (row == 4){
+            int spacesOnEachSide = 18 - (((int)self.winner.length / 2) + 4);
+			printf("%*.0i", spacesOnEachSide, 0);
+            [InputController showText:[NSString stringWithFormat:@"%@ has won!", self.winner]];
+            printf("%*.0i", spacesOnEachSide, 0);
+            printf("\n\n");
+            continue;
+        }
+        
+        for (int column = 0; column < self.sideLength; column++){
+            printf("!!! ");
+        }
+        printf("\n\n");
+    }
+}
 
+#pragma mark - <PlayerPositionDelegate>
+
+-(void)player:(Player*)player movedNumberOfPositions:(int)numberOfPositions {
+    [InputController showLineWithText:[NSString stringWithFormat:
+                                       @"%@ moved %d spaces",
+                                       player.name, numberOfPositions]];
+
+}
+
+-(void)player:(Player*)player encounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber{
+    
+}
+
+-(void)player:(Player*)player encounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber{
+    
+}
+
+-(void)playerHasWon:(Player*)player{
+    self.winner = player.name;
+}
 
 #pragma mark - class
 

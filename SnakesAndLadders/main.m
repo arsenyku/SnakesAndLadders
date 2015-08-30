@@ -11,6 +11,7 @@
 #import "InputController.h"
 
 static NSString* const RollCommand = @"roll";
+static NSString* const NewGameCommand = @"new";
 static NSString* const QuitCommand = @"quit";
 
 void showGameMenu(){
@@ -61,7 +62,8 @@ int main(int argc, const char * argv[]) {
             NSString *p2Name = collectInput(inputController);
             
             [game startNewGameWithPlayer1:p1Name andPlayer2:p2Name];
-                        
+            
+            stayInTurnLoop = YES;
             
             
             while (stayInTurnLoop){
@@ -78,6 +80,11 @@ int main(int argc, const char * argv[]) {
                     stayInGameLoop = NO;
                     break;
                     
+                } else if ([input hasPrefix:NewGameCommand]){
+                    game = [GameController new];
+                    stayInTurnLoop = NO;
+                    continue;
+                
                 } else {
                     // ROLL!
                     

@@ -16,3 +16,13 @@
 
 -(instancetype)initWithId:(NSNumber*)idNumber;
 @end
+
+
+@protocol PlayerPositionDelegate <NSObject>
+
+-(void)player:(Player*)player movedNumberOfPositions:(int)numberOfPositions;
+-(void)player:(Player*)player encounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber;
+-(void)player:(Player*)player encounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber;
+-(void)playerHasWon:(Player*)player;
+
+@end

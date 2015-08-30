@@ -28,19 +28,17 @@
 {
     self = [super init];
     if (self) {
-        _board = [Board new];
+        _board = [Board new] ;
         _die = [[Dice alloc] initWithName:@"SnakesAndLadders"];
         _players = @[ [[Player alloc] initWithId:@1], [[Player alloc] initWithId:@2] ];
+        
+        _playerPositionDelegate = _board;
 
     }
     return self;
 }
 
 #pragma mark - Public
-
-//-(Player *)playerThisTurn{
-//    return self.playerThisTurn;
-//}
 
 -(void)startNewGameWithPlayer1:(NSString*)player1Name andPlayer2:(NSString*)player2Name{
  
@@ -54,11 +52,21 @@
 }
 
 -(int)rollAndMoveCurrentPlayer;{
+    if (self.winner != nil){
+        [self.playerPositionDelegate playerHasWon:self.winner];
+        return 0;
+    }
+    
     int roll = [self.die roll];
     
     [self movePlayerByAmount:roll];
     
     self.playerThisTurn = self.players [ [self.playerThisTurn.idNumber isEqual:@1] ? 1 : 0 ];
+    
+    [self.playerPositionDelegate player:self.playerThisTurn movedNumberOfPositions:roll];
+
+    if (self.winner != nil)
+	    [self.playerPositionDelegate playerHasWon:self.winner];
     
     return roll;
 }
@@ -73,7 +81,13 @@
 }
 
 
-
+-(Player*)winner{
+    for (Player* player in self.players) {
+        if (player.row == self.board.sideLength-1 && player.column == 0 )
+            return player;
+    }
+    return nil;
+}
 
 
 

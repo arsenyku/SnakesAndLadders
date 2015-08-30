@@ -10,7 +10,7 @@
 #import "BoardCell.h"
 #import "Player.h"
 
-@interface Board : NSObject
+@interface Board : NSObject <PlayerPositionDelegate>
 
 @property (nonatomic, assign, readonly)int sideLength;
 
