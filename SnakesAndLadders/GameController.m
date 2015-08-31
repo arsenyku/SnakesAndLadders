@@ -131,10 +131,20 @@
         destinationCell = (SnakesAndLaddersCell*)[self.board skipBackwardFromCell:originCell byNumberOfLinks:abs(numberOfCells)];
 
     if (destinationCell == nil){
-        destinationCell = (SnakesAndLaddersCell*)[self.board cellAtRow:self.board.sideLength-1 andColumn:0];
-        self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
-        self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
         
+        if (numberOfCells >= 0){
+            // We moved forward and ended up on a nil cell
+            // ==> we overshot the end of the board.
+            destinationCell = (SnakesAndLaddersCell*)[self.board cellAtRow:self.board.sideLength-1 andColumn:0];
+            self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
+            self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
+        } else {
+            // We moved backward and ended up on a nil cel
+            // ==> we hit a snake that pushed us past the beginning of the board
+            destinationCell = (SnakesAndLaddersCell*)[self.board cellAtRow:0 andColumn:0];
+            self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
+            self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];
+        }
     } else {
     	self.playerThisTurn.row = [(NSNumber*)destinationCell.propertyList[ @"row" ] intValue];
     	self.playerThisTurn.column = [(NSNumber*)destinationCell.propertyList[ @"column" ] intValue];

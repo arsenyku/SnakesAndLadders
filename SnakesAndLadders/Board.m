@@ -313,22 +313,25 @@
 
 -(void)player:(Player*)player movedNumberOfPositions:(int)numberOfPositions {
     [InputController showLineWithText:[NSString stringWithFormat:
-                                       @"%@ moved %d spaces",
-                                       player.name, numberOfPositions]];
+                                       @"%@ moved %d space%@",
+                                       player.name, numberOfPositions,
+                                       abs(numberOfPositions) == 1 ? @"" : @"s"]];
 
 }
 
 -(void)player:(Player*)player encounteredSnakeAtRow:(int)row andColumn:(int)column withSetback:(int)setbackNumber{
     [InputController showLineWithText:[NSString stringWithFormat:
-                                       @"%@ encounterd a SNAKE!!!  You will move back by %d spaces.",
-                                       player.name, setbackNumber]];
+                                       @"%@ encounterd a SNAKE!!!  You will move back by %d space%@.",
+                                       player.name, setbackNumber,
+                                       setbackNumber == 1 ? @"" : @"s"]];
 
 }
 
 -(void)player:(Player*)player encounteredLadderAtRow:(int)row andColumn:(int)column withForwardBoost:(int)forwardBoostNumber{
     [InputController showLineWithText:[NSString stringWithFormat:
-                                       @"%@ encounterd a LADDER!!!  You will move forward by %d spaces.",
-                                       player.name, forwardBoostNumber]];
+                                       @"%@ encounterd a LADDER!!!  You will move forward by %d space%@.",
+                                       player.name, forwardBoostNumber,
+                                       forwardBoostNumber == 1 ? @"" : @"s"]];
  
 }
 
